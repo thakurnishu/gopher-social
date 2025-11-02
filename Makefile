@@ -7,8 +7,8 @@ dep-up:
 dep-down:
 	docker compose down
 
-.PHONY: migrate-create
-migration:
+.PHONY: create-migration
+create-migration:
 	@migrate create -seq -ext sql -dir $(MIGRATION_PATH) $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: migrate-up
