@@ -10,19 +10,19 @@ import (
 	"github.com/thakurnishu/gopher-social/internal/store"
 )
 
-type Application struct {
+type Server struct {
 	config config.Config
 	store  store.Storage
 }
 
-func NewApp(cfg config.Config, store store.Storage) *Application {
-	return &Application{
+func NewApp(cfg config.Config, store store.Storage) *Server {
+	return &Server{
 		config: cfg,
 		store:  store,
 	}
 }
 
-func (api *Application) Run(mux *chi.Mux) error {
+func (api *Server) Run(mux *chi.Mux) error {
 
 	srv := &http.Server{
 		Addr:         api.config.Addr,

@@ -2,7 +2,7 @@ package server
 
 import "net/http"
 
-func (api *Application) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
+func (api *Server) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]string{
 		"status":  "ok",

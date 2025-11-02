@@ -15,15 +15,15 @@ type CreatePostPayload struct {
 	Tags    []string `json:"tags"`
 }
 
-func (app *Application) createPostHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) createPostHandler(w http.ResponseWriter, r *http.Request) {
 	var payload CreatePostPayload
 	if err := readJSON(w, r, &payload); err != nil {
-		app.badRequestResponse(w, r, err)
+		s.badRequestResponse(w, r, err)
 		return
 	}
 
 	if err := Validate.Struct(payload); err != nil {
-		app.badRequestResponse(w, r, err)
+		s.badRequestResponse(w, r, err)
 	}
 
 	post := &store.Post{
@@ -33,48 +33,48 @@ func (app *Application) createPostHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	ctx := r.Context()
-	if err := app.store.Posts.Create(ctx, post); err != nil {
-		app.internalServerError(w, r, err)
+	if err := s.store.Posts.Create(ctx, post); err != nil {
+		s.internalServerError(w, r, err)
 		return
 	}
 
 	if err := writeJSON(w, http.StatusCreated, post); err != nil {
-		app.internalServerError(w, r, err)
+		s.internalServerError(w, r, err)
 		return
 	}
 }
 
-func (app *Application) getPostHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	idParam := chi.URLParam(r, "postID")
 	id, err := strconv.ParseInt(idParam, 10, 64)
 	if err != nil {
-		app.internalServerError(w, r, err)
+		s.internalServerError(w, r, err)
 		return
 	}
 
 	ctx := r.Context()
 
-	post, err := app.store.Posts.GetByID(ctx, id)
+	post, err := s.store.Posts.GetByID(ctx, id)
 	if err != nil {
 		switch {
 		case errors.Is(err, store.ErrNotFound):
-			app.notFoundResponse(w, r, err)
+			s.notFoundResponse(w, r, err)
 		default:
-			app.internalServerError(w, r, err)
+			s.internalServerError(w, r, err)
 		}
 		return
 	}
 
-	comments, err := app.store.Comments.GetByPostID(ctx, id)
+	comments, err := s.store.Comments.GetByPostID(ctx, id)
 	if err != nil {
-		app.internalServerError(w, r, err)
+		s.internalServerError(w, r, err)
 		return
 	}
 
 	post.Comments = comments
 
 	if err := writeJSON(w, http.StatusOK, post); err != nil {
-		app.internalServerError(w, r, err)
+		s.internalServerError(w, r, err)
 		return
 	}
 }
