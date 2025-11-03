@@ -15,7 +15,7 @@ type Server struct {
 	store  store.Storage
 }
 
-func NewApp(cfg config.Config, store store.Storage) *Server {
+func NewServer(cfg config.Config, store store.Storage) *Server {
 	return &Server{
 		config: cfg,
 		store:  store,

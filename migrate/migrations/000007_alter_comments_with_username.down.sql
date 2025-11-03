@@ -1,0 +1,5 @@
+ALTER TABLE 
+   comments 
+DROP 
+    COLUMN username
+

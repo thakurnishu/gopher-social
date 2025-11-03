@@ -25,7 +25,7 @@ func main() {
 	log.Println("database connection establised")
 	storage := store.NewStorage(db)
 
-	app := server.NewApp(cfg, storage)
+	app := server.NewServer(cfg, storage)
 	mux := app.RegisterRoutes()
 	log.Fatal(app.Run(mux))
 }

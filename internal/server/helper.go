@@ -3,7 +3,9 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -34,4 +36,9 @@ func writeJSONError(w http.ResponseWriter, status int, message string) error {
 		Error string `json:"error"`
 	}
 	return writeJSON(w, status, &envelope{Error: message})
+}
+
+func getIntParam(r *http.Request, key string) (int64, error) {
+	idParam := chi.URLParam(r, key)
+	return strconv.ParseInt(idParam, 10, 64)
 }
