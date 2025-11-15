@@ -25,6 +25,9 @@ func (s *CommentStore) Create(ctx context.Context, comment *Comment) error {
 		VALUES ($1, $2, $3, $4) RETURNING id, created_at, updated_at
 	`
 
+	ctx, canel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer canel()
+
 	if err := s.db.QueryRowContext(
 		ctx,
 		query,
@@ -51,6 +54,9 @@ func (s *CommentStore) GetByPostID(ctx context.Context, postID int64) ([]Comment
 		WHERE c.post_id = $1
 		ORDER BY c.created_at DESC
 	`
+
+	ctx, canel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer canel()
 
 	rows, err := s.db.QueryContext(ctx, query, postID)
 	if err != nil {

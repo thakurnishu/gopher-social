@@ -24,6 +24,9 @@ func (s *UserStore) Create(ctx context.Context, user *User) error {
 		VALUES ($1, $2, $3) RETURNING id, created_at, updated_at
 	`
 
+	ctx, canel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer canel()
+
 	if err := s.db.QueryRowContext(
 		ctx,
 		query,

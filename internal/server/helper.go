@@ -42,3 +42,10 @@ func getIntParam(r *http.Request, key string) (int64, error) {
 	idParam := chi.URLParam(r, key)
 	return strconv.ParseInt(idParam, 10, 64)
 }
+
+func (s *Server) jsonResponse(w http.ResponseWriter, status int, data any) error {
+	type envelope struct {
+		Data any `json:"data"`
+	}
+	return writeJSON(w, status, &envelope{Data: data})
+}

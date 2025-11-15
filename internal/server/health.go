@@ -10,7 +10,7 @@ func (api *Server) healthCheckHandler(w http.ResponseWriter, r *http.Request) {
 		"version": api.config.Version,
 	}
 
-	if err := writeJSON(w, http.StatusOK, data); err != nil {
+	if err := api.jsonResponse(w, http.StatusOK, data); err != nil {
 		api.internalServerError(w, r, err)
 		return
 	}
