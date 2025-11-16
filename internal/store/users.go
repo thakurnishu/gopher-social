@@ -43,3 +43,32 @@ func (s *UserStore) Create(ctx context.Context, user *User) error {
 
 	return nil
 }
+
+func (s *UserStore) GetByID(ctx context.Context, userID int64) (*User, error) {
+	query := `
+		SELECT id, username, email, created_at, updated_at
+		FROM users
+		WHERE id = $1
+	`
+
+	ctx, canel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer canel()
+
+	var user User
+	if err := s.db.QueryRowContext(ctx, query, userID).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+	); err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			return nil, ErrNotFound
+		default:
+			return nil, err
+		}
+	}
+
+	return &user, nil
+}

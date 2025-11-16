@@ -5,9 +5,9 @@ import (
 
 	"github.com/thakurnishu/gopher-social/internal/config"
 	"github.com/thakurnishu/gopher-social/internal/db"
-	"github.com/thakurnishu/gopher-social/internal/server"
 	"github.com/thakurnishu/gopher-social/internal/store"
 )
+
 
 func main() {
 	cfg := config.Load()
@@ -24,8 +24,6 @@ func main() {
 	defer dbConn.Close()
 	log.Println("database connection establised")
 	storage := store.NewStorage(dbConn)
-
-	app := server.NewServer(cfg, storage)
-	mux := app.RegisterRoutes()
-	log.Fatal(app.Run(mux))
+	
+	db.Seed(storage)
 }
