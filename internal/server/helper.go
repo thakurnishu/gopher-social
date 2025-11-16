@@ -47,5 +47,8 @@ func (s *Server) jsonResponse(w http.ResponseWriter, status int, data any) error
 	type envelope struct {
 		Data any `json:"data"`
 	}
-	return writeJSON(w, status, &envelope{Data: data})
+	if data != nil {
+		return writeJSON(w, status, &envelope{Data: data})
+	}
+	return writeJSON(w, status, nil)
 }

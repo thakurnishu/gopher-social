@@ -6,7 +6,6 @@ services:
       POSTGRES_DB: gopher_social
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpassword
-
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
