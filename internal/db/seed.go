@@ -96,7 +96,7 @@ func Seed(store store.Storage) {
 		}
 	}
 
-	comments := generateComments(500, posts) 
+	comments := generateComments(50000, posts) 
 	for _, comment := range comments {
 		if err := store.Comments.Create(ctx, comment); err != nil {
 			log.Println("Error creating comment:", err)
